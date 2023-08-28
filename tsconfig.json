@@ -1,0 +1,26 @@
+{
+    "$schema": "https://json.schemastore.org/tsconfig",
+    "display": "Default",
+    "compilerOptions": {
+        "composite": false,
+        "declaration": true,
+        "declarationMap": true,
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "importHelpers": true,
+        "inlineSources": false,
+        "isolatedModules": true,
+        "module": "ES2020",
+        "moduleResolution": "node",
+        "noUnusedLocals": false,
+        "noUnusedParameters": false,
+        "outDir": "dist",
+        "preserveWatchOutput": true,
+        "rootDir": "src",
+        "skipLibCheck": true,
+        "strict": true,
+        "target": "ES2020"
+    },
+    "include": ["src/**/*.ts"],
+    "exclude": ["node_modules"]
+}
