@@ -6,8 +6,8 @@ The `deploy --export <path>` option accepts a path and writes a json file with m
 
 ```json
 {
-    "name": "sepolia",
-    "chainId": "11155111",
+    "name": "mainnet",
+    "chainId": "1",
     "contracts": {
         "CartesiDAppFactory": {
             "address": "0x7122cd1221C20892234186facfE8615e6743Ab02",
