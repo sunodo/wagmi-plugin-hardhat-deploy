@@ -1,4 +1,4 @@
-import fs from "fs";
+import fs from "fs"; 
 import path from "path";
 import type { ContractConfig, Plugin } from "@wagmi/cli";
 import type { Abi, Address } from "abitype";
