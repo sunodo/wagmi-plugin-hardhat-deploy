@@ -3,6 +3,6 @@ config:
         ul_multi: 3
         ul_single: 3 
     no-duplicate-header:
-        siblings_only: true
+        siblings_only: true 
     ul-indent:
         indent: 4
