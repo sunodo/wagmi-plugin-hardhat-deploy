@@ -7,7 +7,7 @@
 -   configuration to filter generated contracts
 -   moving to its own repository at github
 
-## 0.1.0
+## 0.1.0 
 
 ### Minor Changes
 
