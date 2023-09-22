@@ -6,7 +6,7 @@
     "author": "Danilo Tuler",
     "license": "Apache-2.0",
     "repository": "sunodo/wagmi-plugin-hardhat-deploy",
-    "scripts": {
+    "scripts": { 
         "build": "tsup"
     },
     "type": "module",
