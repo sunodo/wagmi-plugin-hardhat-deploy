@@ -7,4 +7,4 @@ export default defineConfig({
     format: ["cjs", "esm"],
     sourcemap: true,
     splitting: false,
-});
+}); 
