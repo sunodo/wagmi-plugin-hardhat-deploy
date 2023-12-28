@@ -60,6 +60,9 @@ The plugin accepts the following configuration:
 
 -   `excludes`: an array of regular expressions to match the files to be excluded. If not specified, no files are excluded.
 
+-   `include_networks:` an array of exported filename(s) without the .json extension to include in the output file.
+-   `exclude_networks:` an array of exported filename(s) without the .json extension to exclude from the output file.
+
 ## License
 
 This code is licensed under the Apache 2.0 License. See [LICENSE](./LICENSE) for more information.
