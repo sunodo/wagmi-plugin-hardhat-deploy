@@ -21,6 +21,8 @@ export interface HardhatDeployOptions {
     directory: string;
     includes?: RegExp[];
     excludes?: RegExp[];
+    include_networks?: string[];
+    exclude_networks?: string[];
 }
 
 const shouldInclude = (name: string, config: HardhatDeployOptions): boolean => {
@@ -46,12 +48,42 @@ const shouldInclude = (name: string, config: HardhatDeployOptions): boolean => {
     }
 };
 
+const shouldIncludeFile = (
+    fileName: string,
+    config: HardhatDeployOptions
+): boolean => {
+    // Handle network-based includes and excludes
+    if (config.include_networks && config.include_networks.length > 0) {
+        if (
+            !config.include_networks.some((network) =>
+                fileName.includes(network)
+            )
+        ) {
+            return false;
+        }
+    }
+
+    if (config.exclude_networks && config.exclude_networks.length > 0) {
+        if (
+            config.exclude_networks.some((network) =>
+                fileName.includes(network)
+            )
+        ) {
+            return false;
+        }
+    }
+
+    return true; // default to include if no specific rules are set
+};
+
 const plugin = (config: HardhatDeployOptions): Plugin => {
     return {
         name: "hardhat-deploy",
         contracts: () => {
             // list all files exported by hardhat-deploy
-            const files = fs.readdirSync(config.directory);
+            const files = fs
+                .readdirSync(config.directory)
+                .filter((file) => shouldIncludeFile(file, config));
 
             // build a collection of contracts as expected by wagmi (ContractConfig) indexed by name
             const contracts = files.reduce<Record<string, ContractConfig>>(
@@ -63,7 +95,7 @@ const plugin = (config: HardhatDeployOptions): Plugin => {
                     ) as Export;
                     const chainId = parseInt(deployment.chainId);
 
-                    // merge this contract with pontentially existing contract from other chain
+                    // merge this contract with potentially existing contract from other chain
                     Object.entries(deployment.contracts).forEach(
                         ([name, { abi, address }]) => {
                             if (shouldInclude(name, config)) {
