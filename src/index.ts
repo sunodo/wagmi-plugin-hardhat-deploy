@@ -52,28 +52,24 @@ const shouldIncludeFile = (
     fileName: string,
     config: HardhatDeployOptions
 ): boolean => {
-    // Handle network-based includes and excludes
+    // Extract the network name from the file name (assumes format "networkName.json")
+    const networkName = fileName.split(".")[0];
+
+    // Handle network-based includes
     if (config.include_networks && config.include_networks.length > 0) {
-        if (
-            !config.include_networks.some((network) =>
-                fileName.includes(network)
-            )
-        ) {
+        if (!config.include_networks.includes(networkName)) {
             return false;
         }
     }
 
+    // Handle network-based excludes
     if (config.exclude_networks && config.exclude_networks.length > 0) {
-        if (
-            config.exclude_networks.some((network) =>
-                fileName.includes(network)
-            )
-        ) {
+        if (config.exclude_networks.includes(networkName)) {
             return false;
         }
     }
 
-    return true; // default to include if no specific rules are set
+    return true; // Default to include if no specific rules are set
 };
 
 const plugin = (config: HardhatDeployOptions): Plugin => {
