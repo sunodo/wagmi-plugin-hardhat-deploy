@@ -53,7 +53,7 @@ const shouldIncludeFile = (
     config: HardhatDeployOptions
 ): boolean => {
     // Extract the network name from the file name (assumes format "networkName.json")
-    const networkName = fileName.split(".")[0];
+    const networkName = path.basename(fileName, ".json");
 
     // Handle network-based includes
     if (config.include_networks && config.include_networks.length > 0) {
