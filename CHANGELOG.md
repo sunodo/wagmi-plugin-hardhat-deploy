@@ -1,5 +1,12 @@
 # @sunodo/wagmi-plugin-hardhat-deploy
 
+## 0.3.0
+
+### Minor Changes
+
+-   dc9db52: migration to viem v2 and wagmi v2
+-   a386df4: add include/exclude network ability
+
 ## 0.2.0
 
 ### Minor Changes
