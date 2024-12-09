@@ -62,6 +62,8 @@ The plugin accepts the following configuration:
 
 -   `include_networks:` an array of exported filename(s) without the .json extension to include in the output file.
 -   `exclude_networks:` an array of exported filename(s) without the .json extension to exclude from the output file.
+-   `prefix_contracts:` A string to be prepended to the contract name. Help avoid name collisions and improve intellisense when supporting multiple major versions of the same library.
+-   `suffix_contracts:` A string to be appended to the contract name. Help avoid name collisions and improve intellisense when supporting multiple major versions of the same library.
 
 ## License
 

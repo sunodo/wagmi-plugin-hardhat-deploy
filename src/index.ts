@@ -1,7 +1,7 @@
-import fs from "fs";
-import path from "path";
 import type { ContractConfig, Plugin } from "@wagmi/cli";
 import type { Abi, Address } from "abitype";
+import fs from "fs";
+import path from "path";
 
 export interface ContractExport {
     address: Address;
@@ -21,6 +21,8 @@ export interface HardhatDeployOptions {
     directory: string;
     includes?: RegExp[];
     excludes?: RegExp[];
+    prefix_contracts?: string;
+    suffix_contracts?: string;
     include_networks?: string[];
     exclude_networks?: string[];
 }
@@ -50,7 +52,7 @@ const shouldInclude = (name: string, config: HardhatDeployOptions): boolean => {
 
 const shouldIncludeFile = (
     fileName: string,
-    config: HardhatDeployOptions
+    config: HardhatDeployOptions,
 ): boolean => {
     // Extract the network name from the file name (assumes format "networkName.json")
     const networkName = path.basename(fileName, ".json");
@@ -72,6 +74,11 @@ const shouldIncludeFile = (
     return true; // Default to include if no specific rules are set
 };
 
+const addPrefixSuffix = (
+    contractName: string,
+    { prefix_contracts = "", suffix_contracts = "" }: HardhatDeployOptions,
+) => `${prefix_contracts}${contractName}${suffix_contracts}`;
+
 const plugin = (config: HardhatDeployOptions): Plugin => {
     return {
         name: "hardhat-deploy",
@@ -87,14 +94,18 @@ const plugin = (config: HardhatDeployOptions): Plugin => {
                     // read export file (hardhat-deploy format)
                     const filename = path.join(config.directory, file);
                     const deployment = JSON.parse(
-                        fs.readFileSync(filename).toString()
+                        fs.readFileSync(filename).toString(),
                     ) as Export;
                     const chainId = parseInt(deployment.chainId);
 
                     // merge this contract with potentially existing contract from other chain
                     Object.entries(deployment.contracts).forEach(
-                        ([name, { abi, address }]) => {
-                            if (shouldInclude(name, config)) {
+                        ([contractName, { abi, address }]) => {
+                            if (shouldInclude(contractName, config)) {
+                                const name = addPrefixSuffix(
+                                    contractName,
+                                    config,
+                                );
                                 const contract = acc[name] || {
                                     name,
                                     abi,
@@ -107,18 +118,18 @@ const plugin = (config: HardhatDeployOptions): Plugin => {
                                 addresses[chainId] = address;
                                 acc[name] = contract;
                             }
-                        }
+                        },
                     );
 
                     return acc;
                 },
-                {}
+                {},
             );
 
             // simplify address structure if addresses on all chains are the same
             Object.values(contracts).forEach((contract) => {
                 const addresses = Object.values(
-                    contract.address as Record<number, Address>
+                    contract.address as Record<number, Address>,
                 );
                 // build a unique list of addresses
                 const unique = [...new Set(addresses)];
