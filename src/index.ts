@@ -24,6 +24,8 @@ export interface HardhatDeployOptions {
     excludes?: RegExp[];
     include_networks?: string[];
     exclude_networks?: string[];
+    namePrefix?: string;
+    nameSuffix?: string;
 }
 
 const shouldInclude = (name: string, config: HardhatDeployOptions): boolean => {
@@ -73,6 +75,8 @@ const shouldIncludeFile = (
 };
 
 const plugin = (config: HardhatDeployOptions): Plugin => {
+    const { namePrefix = "", nameSuffix = "" } = config;
+
     return {
         name: "hardhat-deploy",
         contracts: () => {
@@ -96,8 +100,11 @@ const plugin = (config: HardhatDeployOptions): Plugin => {
                         deployment.contracts
                     )) {
                         if (shouldInclude(name, config)) {
-                            const contract = acc[name] || {
-                                name,
+                            // build name with optional prefix and suffix
+                            const contractName = `${namePrefix}${name}${nameSuffix}`;
+
+                            const contract = acc[contractName] || {
+                                name: contractName,
                                 abi,
                                 address: {},
                             };
@@ -106,7 +113,7 @@ const plugin = (config: HardhatDeployOptions): Plugin => {
                                 Address
                             >;
                             addresses[chainId] = address;
-                            acc[name] = contract;
+                            acc[contractName] = contract;
                         }
                     }
                     return acc;

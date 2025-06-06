@@ -60,8 +60,13 @@ The plugin accepts the following configuration:
 
 -   `excludes`: an array of regular expressions to match the files to be excluded. If not specified, no files are excluded.
 
--   `include_networks:` an array of exported filename(s) without the .json extension to include in the output file.
--   `exclude_networks:` an array of exported filename(s) without the .json extension to exclude from the output file.
+-   `include_networks`: an array of exported filename(s) without the .json extension to include in the output file.
+
+-   `exclude_networks`: an array of exported filename(s) without the .json extension to exclude from the output file.
+
+-   `namePrefix`: prefix to prepend to artifact names. Useful for preventing name collisions between contracts from other sources.
+
+-   `nameSuffix`: suffix to append to artifact names. Useful for preventing name collisions between contracts from other sources.
 
 ## License
 
