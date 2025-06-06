@@ -22,8 +22,8 @@ export interface HardhatDeployOptions {
     directory: string;
     includes?: RegExp[];
     excludes?: RegExp[];
-    include_networks?: string[];
-    exclude_networks?: string[];
+    includeNetworks?: string[];
+    excludeNetworks?: string[];
     namePrefix?: string;
     nameSuffix?: string;
 }
@@ -58,15 +58,15 @@ const shouldIncludeFile = (
     const networkName = path.basename(fileName, ".json");
 
     // Handle network-based includes
-    if (config.include_networks && config.include_networks.length > 0) {
-        if (!config.include_networks.includes(networkName)) {
+    if (config.includeNetworks && config.includeNetworks.length > 0) {
+        if (!config.includeNetworks.includes(networkName)) {
             return false;
         }
     }
 
     // Handle network-based excludes
-    if (config.exclude_networks && config.exclude_networks.length > 0) {
-        if (config.exclude_networks.includes(networkName)) {
+    if (config.excludeNetworks && config.excludeNetworks.length > 0) {
+        if (config.excludeNetworks.includes(networkName)) {
             return false;
         }
     }
