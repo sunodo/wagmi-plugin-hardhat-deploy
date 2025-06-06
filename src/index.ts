@@ -1,11 +1,12 @@
-import fs from "fs";
-import path from "path";
 import type { ContractConfig, Plugin } from "@wagmi/cli";
 import type { Abi, Address } from "abitype";
+import fs from "node:fs";
+import path from "node:path";
 
 export interface ContractExport {
     address: Address;
     abi: Abi;
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     linkedData?: any;
 }
 
@@ -42,10 +43,9 @@ const shouldInclude = (name: string, config: HardhatDeployOptions): boolean => {
             }
         }
         return false;
-    } else {
-        // if there is no list of includes, then include everything
-        return true;
     }
+    // if there is no list of includes, then include everything
+    return true;
 };
 
 const shouldIncludeFile = (
@@ -89,44 +89,44 @@ const plugin = (config: HardhatDeployOptions): Plugin => {
                     const deployment = JSON.parse(
                         fs.readFileSync(filename).toString()
                     ) as Export;
-                    const chainId = parseInt(deployment.chainId);
+                    const chainId = Number.parseInt(deployment.chainId);
 
                     // merge this contract with potentially existing contract from other chain
-                    Object.entries(deployment.contracts).forEach(
-                        ([name, { abi, address }]) => {
-                            if (shouldInclude(name, config)) {
-                                const contract = acc[name] || {
-                                    name,
-                                    abi,
-                                    address: {},
-                                };
-                                const addresses = contract.address as Record<
-                                    number,
-                                    Address
-                                >;
-                                addresses[chainId] = address;
-                                acc[name] = contract;
-                            }
+                    for (const [name, { abi, address }] of Object.entries(
+                        deployment.contracts
+                    )) {
+                        if (shouldInclude(name, config)) {
+                            const contract = acc[name] || {
+                                name,
+                                abi,
+                                address: {},
+                            };
+                            const addresses = contract.address as Record<
+                                number,
+                                Address
+                            >;
+                            addresses[chainId] = address;
+                            acc[name] = contract;
                         }
-                    );
-
+                    }
                     return acc;
                 },
                 {}
             );
 
             // simplify address structure if addresses on all chains are the same
-            Object.values(contracts).forEach((contract) => {
+            for (const contract of Object.values(contracts)) {
                 const addresses = Object.values(
                     contract.address as Record<number, Address>
                 );
+
                 // build a unique list of addresses
                 const unique = [...new Set(addresses)];
 
                 // replace field with a single address if all addresses are the same
                 contract.address =
                     unique.length === 1 ? unique[0] : contract.address;
-            });
+            }
 
             return Object.values(contracts);
         },
