@@ -9,7 +9,8 @@
     "license": "Apache-2.0",
     "repository": "sunodo/wagmi-plugin-hardhat-deploy",
     "scripts": {
-        "build": "tsup"
+        "build": "tsup",
+        "release": "pnpm build && changeset publish"
     },
     "type": "module",
     "exports": {
