@@ -1,5 +1,12 @@
 # @sunodo/wagmi-plugin-hardhat-deploy
 
+## 0.4.0
+
+### Minor Changes
+
+-   222f25f: Contract name prefix and suffix
+-   f8874e6: Change config name from include_networks and exclude_networks to includeNetworks and excludeNetworks (BREAKING)
+
 ## 0.3.0
 
 ### Minor Changes
